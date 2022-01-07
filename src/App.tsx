@@ -8,7 +8,6 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import "./styles/App.css";
-import Title from "antd/lib/skeleton/Title";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -63,16 +62,14 @@ function App() {
 
 export default App;
 
-interface LogoProps{
-  collapsed:boolean;
+interface LogoProps {
+  collapsed: boolean;
 }
-function Logo({collapsed}:LogoProps) {
+function Logo({ collapsed }: LogoProps) {
   const { Title } = Typography;
 
-  let name="";
-  collapsed?name="NM":name="NasManager";
-  
-  return(
-    <Title level={3}>{name}</Title>
-  )
+  let name = "";
+  collapsed ? (name = "NM") : (name = "NasManager");
+
+  return <Title level={3}>{name}</Title>;
 }
