@@ -11,6 +11,16 @@ function Hello({name,enthusiasmLevel=1}:Props){
     }
 
     return (
-        <div className='hello'></div>
+        <div className='hello'>
+            <div className='greeting'>
+                Hello {name + getExclaimationMarks(enthusiasmLevel)}
+            </div>
+        </div>
     )
+}
+
+export default Hello;
+
+function getExclaimationMarks(numChars:number){
+    return Array(numChars+1).join('!')
 }
