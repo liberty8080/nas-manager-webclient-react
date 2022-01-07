@@ -1,0 +1,39 @@
+@import "~antd/dist/antd.css";
+
+
+div.App,.ant-layout {
+  height: 100%;
+}
+
+.App .trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.App .trigger:hover {
+  color: #3f69f3;
+}
+
+.App .logo {
+  height: 32px;
+  margin: 16px;
+  /* background: rgba(255, 255, 255, 0.3); */
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+h3.ant-typography, .ant-typography h3 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.35;
+  color: rgb(94, 174, 211);
+}

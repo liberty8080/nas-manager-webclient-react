@@ -1,29 +1,77 @@
-// import React from 'react';
-import logo from './logo.svg';
-import {Button} from 'antd'
-
-import './App.css';
+import { Layout, Menu, Typography } from "antd";
+import React, { useState } from "react";
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  ClearOutlined,
+  VideoCameraOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import "./styles/App.css";
 
 function App() {
+  const [collapsed, setCollapsed] = useState(false);
+  const { Header, Sider, Content } = Layout;
+  const toggle = () => {
+    setCollapsed(!collapsed);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Button type="primary">Button</Button>
+      <Layout>
+        <Sider trigger={null} collapsible collapsed={collapsed}>
+          <div className="logo">
+            <Logo collapsed={collapsed} />
+          </div>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu.Item key="1" icon={<ClearOutlined />}>
+              Purify
+            </Menu.Item>
+            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+              nav 2
+            </Menu.Item>
+            <Menu.Item key="3" icon={<UploadOutlined />}>
+              nav 3
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }}>
+            {React.createElement(
+              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: "trigger",
+                onClick: toggle,
+              }
+            )}
+          </Header>
+          <Content
+            className="site-layout-background"
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              minHeight: 280,
+            }}
+          >
+            Content
+          </Content>
+        </Layout>
+      </Layout>
     </div>
   );
 }
 
 export default App;
+
+interface LogoProps{
+  collapsed:boolean;
+}
+function Logo({collapsed}:LogoProps) {
+  const { Title } = Typography;
+
+  let name="";
+  collapsed?name="NM":name="NasManager";
+  
+  return(
+    <Title level={3}>{name}</Title>
+  )
+}

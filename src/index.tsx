@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Hello from './components/Hello';
-import Purify from './components/Purify';
-
+import App from './App';
+import './styles/index.css'
 ReactDOM.render(
   <React.StrictMode>
-    <Hello name='TypeScript' enthusiasmLevel={10}/>
-    <Purify></Purify>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
