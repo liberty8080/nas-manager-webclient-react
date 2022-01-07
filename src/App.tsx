@@ -8,6 +8,7 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import "./styles/App.css";
+import Title from "antd/lib/skeleton/Title";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
