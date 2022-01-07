@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Hello from './components/Hello';
+import Purify from './components/Purify';
 
 ReactDOM.render(
   <React.StrictMode>
     <Hello name='TypeScript' enthusiasmLevel={10}/>
+    <Purify></Purify>
   </React.StrictMode>,
   document.getElementById('root')
 );
