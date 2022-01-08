@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import './styles/index.css'
+import ClippedDrawer from './MainPage';
 ReactDOM.render(
   <React.StrictMode>
-    <App/>
+    {/* <App/> */}
+    <ClippedDrawer/>
   </React.StrictMode>,
   document.getElementById('root')
 );
