@@ -1,20 +1,23 @@
-import { Layout, Menu, Typography } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 import React, { useState } from "react";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   ClearOutlined,
   VideoCameraOutlined,
-  UploadOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import "./styles/App.css";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const [currentMenu, setCurrentMenu] = useState(0);
+
   const { Header, Sider, Content } = Layout;
   const toggle = () => {
     setCollapsed(!collapsed);
   };
+
   return (
     <div className="App">
       <Layout>
@@ -29,8 +32,8 @@ function App() {
             <Menu.Item key="2" icon={<VideoCameraOutlined />}>
               nav 2
             </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
+            <Menu.Item key="3" icon={<SettingOutlined />}>
+              Settings
             </Menu.Item>
           </Menu>
         </Sider>
@@ -66,10 +69,7 @@ interface LogoProps {
   collapsed: boolean;
 }
 function Logo({ collapsed }: LogoProps) {
-  const { Title } = Typography;
-
   let name = "";
-  collapsed ? (name = "NM") : (name = "NasManager");
-
-  return <Title level={3}>{name}</Title>;
+  collapsed ? (name = "N M") : (name = "Nas Manager");
+  return <h3 id="title">{name}</h3>;
 }
