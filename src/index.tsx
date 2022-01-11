@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import './styles/index.css'
-import ClippedDrawer from './MainPage';
+import MainPage from './MainPage';
 ReactDOM.render(
   <React.StrictMode>
     {/* <App/> */}
-    <ClippedDrawer/>
+    <MainPage/>
   </React.StrictMode>,
   document.getElementById('root')
 );
