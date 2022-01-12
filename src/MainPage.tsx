@@ -17,6 +17,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
+import Header from "./components/Header";
 
 // TODO: move to redux
 const drawerWidth = 200;
@@ -39,12 +40,14 @@ export default function MainPage() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+      <Header/>
       <AppBar
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1 /* 总在最上层显示 */,
           width: { sm: `calc(100%-${drawerWidth}px)` },
           ml: { sm: `calc(${drawerWidth}px)` },
+          display:'none'
         }}
       >
         <Toolbar>
