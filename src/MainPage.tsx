@@ -53,11 +53,11 @@ export default function MainPage() {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 0, display: { xs: 'block', lg: 'none', xl: 'block' } }}
+            sx={{ mr: 0, display: { sm:'block', md:'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component={"div"}>
+          <Typography variant="h6" noWrap component={"div"}>
             NasManager
           </Typography>
           <IconButton
@@ -65,7 +65,7 @@ export default function MainPage() {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ ml: 0, display: { sm: "block", md: "none",lg:"none" } }}
+            sx={{ ml: 2, display: {xs:'none', sm:'none',md:'block'} }}
           >
             <MenuIcon />
           </IconButton>
