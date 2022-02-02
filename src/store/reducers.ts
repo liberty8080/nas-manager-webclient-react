@@ -30,6 +30,10 @@ const customReducer = (state: customStates = initialState, action: Actions) => {
 
 }
 
-const rootReducer =customReducer
+const rootReducer =combineReducers({
+    app:customReducer
+})
+
+export type rootState = ReturnType<typeof rootReducer>
 
 export default rootReducer

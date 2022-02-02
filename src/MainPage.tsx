@@ -21,6 +21,7 @@ import Header from "./components/Header";
 import {useDispatch, useSelector} from "react-redux";
 import {customStates} from "./store/actions";
 import {customActionTypes} from "./store/consts";
+import {rootState} from "./store/reducers";
 
 // TODO: move to redux
 const drawerWidth = 200;
@@ -36,7 +37,7 @@ export default function MainPage() {
         setOpen(false);
     };
 
-    const menuOpen = useSelector((state: customStates) => state.menuOpen)
+    const menuOpen = useSelector((state:rootState) => state.app.menuOpen)
     const dispatch = useDispatch()
     console.log("open:",menuOpen)
     const dispatchMenuOpen = () => {
