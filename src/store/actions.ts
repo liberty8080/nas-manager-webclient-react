@@ -1,39 +1,36 @@
-/*
-import {ADD, ADD_TYPE, LESSEN, LESSEN_TYPE} from "./consts";
 
-export interface AddAction {
-    type: ADD_TYPE
+export interface IAppStates {
+    isOpen: boolean
+    drawerWidth: number
 }
 
-export interface LessenAction {
-    type: LESSEN_TYPE
-    value:string
+export enum AppActionTypes {
+    MENU_OPEN = "MENU_OPEN",
+    SET_DRAWER_WIDTH = "SET_DRAWER_WIDTH"
 }
 
-export type ModifyAction = AddAction | LessenAction
 
-export const add = (): AddAction => ({
-    type: ADD
+//actions
+export interface IMenuOpenAction {
+    type: AppActionTypes.MENU_OPEN
+    isOpen: boolean
+}
+
+export interface ISetDrawerWidthAction {
+    type: AppActionTypes.SET_DRAWER_WIDTH
+    drawerWidth: number
+}
+
+export const setMenu = (payload: boolean): IMenuOpenAction => ({
+    type: AppActionTypes.MENU_OPEN,
+    isOpen: payload
 })
 
-export const lessen = (value:string): LessenAction => ({
-    type: LESSEN,
-    value
-})*/
 
-import {customActionTypes} from "./consts";
-
-export interface MenuOpenAction {
-    type: customActionTypes.MENU_OPEN
-    payload: boolean
-}
-
-export interface customStates {
-    menuOpen: boolean
-}
-
-export const setMenu = (payload:boolean): MenuOpenAction => ({
-    type: customActionTypes.MENU_OPEN,
-    payload:payload
+export const setDrawerWidth = (payload: number): ISetDrawerWidthAction => ({
+    type: AppActionTypes.SET_DRAWER_WIDTH,
+    drawerWidth: payload
 })
+
+export type AppActions = ReturnType<typeof setMenu> | ReturnType<typeof setDrawerWidth>
 

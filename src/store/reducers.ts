@@ -1,28 +1,23 @@
-import {customStates, setMenu} from "./actions";
-import {customActionTypes} from "./consts";
+import {AppActions, AppActionTypes, IAppStates} from "./actions";
 import {combineReducers} from "redux";
 
-export const initialState: customStates = {
-    menuOpen: true
+export const initialState: IAppStates = {
+    drawerWidth: 200,
+    isOpen: true
 }
-/*const TestReducer = (state:number|string = '',action:ModifyAction)=>{
-    switch (action.type){
-        case ADD:
-            return state = '++';
-        case LESSEN:
-            return state = action.value
-        default:
-            return state
-    }
-}*/
-type Actions = ReturnType<typeof setMenu>
 
-const customReducer = (state: customStates = initialState, action: Actions) => {
+
+const customReducer = (state: IAppStates = initialState, action: AppActions) => {
     switch (action.type) {
-        case customActionTypes.MENU_OPEN:
+        case AppActionTypes.MENU_OPEN:
             return {
                 ...state,
-                menuOpen: !state.menuOpen
+                isOpen: !state.isOpen
+            }
+        case AppActionTypes.SET_DRAWER_WIDTH:
+            return {
+                ...state,
+                drawerWidth: state.drawerWidth
             }
         default:
             return state
@@ -30,8 +25,8 @@ const customReducer = (state: customStates = initialState, action: Actions) => {
 
 }
 
-const rootReducer =combineReducers({
-    app:customReducer
+const rootReducer = combineReducers({
+    app: customReducer
 })
 
 export type rootState = ReturnType<typeof rootReducer>
