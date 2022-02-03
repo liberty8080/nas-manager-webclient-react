@@ -17,9 +17,9 @@ export default function Header(props: IProps) {
                 <IconButton color="inherit" aria-label="open-drawer" edge="end"
                             sx={{display: {xs: 'block', md: 'none'}}}
                             onClick={props.handleLeftDrawerToggle}>
-                    <MenuIcon/>
+                    <MenuIcon sx={{mt:1}}/>
                 </IconButton>
-                <Typography variant="h6" sx={{mx: matchUpMd ? 0 : 'auto'}}>NasManager</Typography>
+                <Typography variant="h6" sx={{mx: matchUpMd ? 0 : 'auto',mt:'3px'}}>NasManager</Typography>
             </Toolbar>
         </AppBar>
     );

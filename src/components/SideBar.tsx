@@ -19,7 +19,7 @@ import {AppActionTypes} from "../store/actions";
 interface IProps {
     drawerOnClose: (event: object) => void
 }
-
+//todo: 自定义MenuItem
 function MenuList() {
     const dispatch = useDispatch();
     const handleMenuClicked = () => {
