@@ -1,10 +1,19 @@
-import {Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, useMediaQuery} from "@mui/material";
+import {
+    Drawer,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Toolbar,
+    useMediaQuery
+} from "@mui/material";
 import {Box} from "@mui/system";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import {useSelector} from "react-redux";
 import {rootState} from "../store/reducers";
 import {useTheme} from "@mui/material/styles";
+import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
+import {Link as RouterLink} from 'react-router-dom'
+
 
 interface IProps {
     drawerOnClose: (event: object) => void
@@ -15,7 +24,12 @@ function MenuList() {
         <Toolbar/>
         <Box sx={{overflow: "auto"}}>
             <List>
-                {["test", "starred", "sendmail", "drafts"].map((text, index) => (
+                    <ListItemButton component={RouterLink} to={'/downloads'} key={"Downloads"} >
+                        <ListItemIcon> <DownloadForOfflineRoundedIcon/> </ListItemIcon>
+                        <ListItemText primary={"Downloads"}/>
+                    </ListItemButton>
+
+                {/* {["Downloads", "starred", "sendmail", "drafts"].map((text, index) => (
                     <ListItem button key={text}>
                         <ListItemIcon>
                             {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
@@ -33,7 +47,7 @@ function MenuList() {
                         </ListItemIcon>
                         <ListItemText primary={text}/>
                     </ListItem>
-                ))}
+                ))}*/}
             </List>
         </Box></>)
 }

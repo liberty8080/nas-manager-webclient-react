@@ -1,18 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import App from './App';
 import './styles/index.css'
 import MainPage from './MainPage';
 import {Provider} from "react-redux";
 import {store} from './store'
+import {BrowserRouter,Routes,Route} from "react-router-dom";
+import Downloads from "./Pages/Downloads";
 
 ReactDOM.render(
     <React.StrictMode>
-        {/* <App/> */}
-        <Provider store={store}>
-            <MainPage/>
-        </Provider>
+        <BrowserRouter>
+            <Provider store={store}>
+                <Routes>
+                    <Route path="/" element={<MainPage/>}>
+                        <Route path="/" element={<Downloads/>}/>
+                        <Route path="/downloads" element={<Downloads/>}/>
+                    </Route>
+                </Routes>
+            </Provider>
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 );

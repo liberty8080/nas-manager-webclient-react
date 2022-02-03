@@ -3,7 +3,7 @@ import {combineReducers} from "redux";
 
 export const initialState: IAppStates = {
     drawerWidth: 200,
-    isOpen: true
+    isOpen: false
 }
 
 
