@@ -8,11 +8,12 @@ import {
     useMediaQuery
 } from "@mui/material";
 import {Box} from "@mui/system";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "../store/reducers";
 import {useTheme} from "@mui/material/styles";
 import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 import {Link as RouterLink} from 'react-router-dom'
+import {AppActionTypes} from "../store/actions";
 
 
 interface IProps {
@@ -20,14 +21,21 @@ interface IProps {
 }
 
 function MenuList() {
+    const dispatch = useDispatch();
+    const handleMenuClicked = () => {
+            dispatch({
+                type: AppActionTypes.MENU_OPEN, payload: false
+            })
+    }
+
     return (<>
         <Toolbar/>
         <Box sx={{overflow: "auto"}}>
             <List>
-                    <ListItemButton component={RouterLink} to={'/downloads'} key={"Downloads"} >
-                        <ListItemIcon> <DownloadForOfflineRoundedIcon/> </ListItemIcon>
-                        <ListItemText primary={"Downloads"}/>
-                    </ListItemButton>
+                <ListItemButton component={RouterLink} to={'/downloads'} key={"Downloads"} onClick={handleMenuClicked}>
+                    <ListItemIcon> <DownloadForOfflineRoundedIcon/> </ListItemIcon>
+                    <ListItemText primary={"Downloads"}/>
+                </ListItemButton>
 
                 {/* {["Downloads", "starred", "sendmail", "drafts"].map((text, index) => (
                     <ListItem button key={text}>
@@ -65,29 +73,29 @@ export default function SideBar(props: IProps) {
             aria-label="mailbox folders"
         >
             {/*mobile drawer*/}
-            <Drawer variant="temporary"
-                    sx={{
-                        width: appSettings.drawerWidth, flexShrink: 0,
-                        [`& .MuiDrawer-paper`]: {width: appSettings.drawerWidth, boxSizing: "border-box",},
-                    }}
-                    open={appSettings.isOpen} onClose={props.drawerOnClose}
+            {!matchUpMd && <Drawer variant="temporary"
+                     sx={{
+                         width: appSettings.drawerWidth, flexShrink: 0,
+                         [`& .MuiDrawer-paper`]: {width: appSettings.drawerWidth, boxSizing: "border-box",},
+                     }}
+                     open={appSettings.isOpen} onClose={props.drawerOnClose}
             >
                 <MenuList/>
-            </Drawer>
+            </Drawer>}
 
             {/*browser drawer*/}
-            <Drawer variant="permanent" open={appSettings.isOpen} onClose={props.drawerOnClose}
-                    sx={{
-                        display: {xs: 'none', md: 'block'},
-                        width: appSettings.drawerWidth, flexShrink: 0,
-                        [`& .MuiDrawer-paper`]: {
-                            width: appSettings.drawerWidth,
-                            boxSizing: "border-box",
-                        },
-                    }}
+            {matchUpMd && <Drawer variant="permanent" open={appSettings.isOpen} onClose={props.drawerOnClose}
+                     sx={{
+                         display: {xs: 'none', md: 'block'},
+                         width: appSettings.drawerWidth, flexShrink: 0,
+                         [`& .MuiDrawer-paper`]: {
+                             width: appSettings.drawerWidth,
+                             boxSizing: "border-box",
+                         },
+                     }}
             >
                 <MenuList/>
-            </Drawer>
+            </Drawer>}
 
         </Box>
     )

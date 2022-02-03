@@ -12,12 +12,12 @@ const customReducer = (state: IAppStates = initialState, action: AppActions) => 
         case AppActionTypes.MENU_OPEN:
             return {
                 ...state,
-                isOpen: !state.isOpen
+                isOpen: action.isOpen
             }
         case AppActionTypes.SET_DRAWER_WIDTH:
             return {
                 ...state,
-                drawerWidth: state.drawerWidth
+                drawerWidth: action.drawerWidth
             }
         default:
             return state

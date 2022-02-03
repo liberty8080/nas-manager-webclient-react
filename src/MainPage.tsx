@@ -19,7 +19,7 @@ export default function MainPage() {
     const dispatch = useDispatch()
     const toggleMenuOpen = () => {
         dispatch({
-            type: AppActionTypes.MENU_OPEN, payload: !menuOpen
+            type: AppActionTypes.MENU_OPEN, isOpen: !menuOpen
         })
     }
 
