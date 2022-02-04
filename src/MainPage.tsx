@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import {Box} from "@mui/system";
 import {useTheme} from "@mui/material/styles";
-import { Outlet } from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
 
 
 import Header from "./components/Header";
@@ -28,8 +28,8 @@ export default function MainPage() {
             <CssBaseline/>
             <Header handleLeftDrawerToggle={toggleMenuOpen}/>
             <SideBar drawerOnClose={toggleMenuOpen}/>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
-                <Toolbar/>
+            <Box component="main"
+                 sx={{flexGrow: 1, p: 3, mt:'64px', minHeight: 'calc(100vh - 64px)', backgroundColor: 'rgb(227, 242, 253)',borderRadius:"14px 14px 0 0"}}>
                 {/*路由替换区域*/}
                 <Outlet/>
             </Box>

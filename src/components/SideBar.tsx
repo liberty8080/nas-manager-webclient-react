@@ -19,13 +19,14 @@ import {AppActionTypes} from "../store/actions";
 interface IProps {
     drawerOnClose: (event: object) => void
 }
+
 //todo: 自定义MenuItem
 function MenuList() {
     const dispatch = useDispatch();
     const handleMenuClicked = () => {
-            dispatch({
-                type: AppActionTypes.MENU_OPEN, payload: false
-            })
+        dispatch({
+            type: AppActionTypes.MENU_OPEN, payload: false
+        })
     }
 
     return (<>
@@ -74,25 +75,29 @@ export default function SideBar(props: IProps) {
         >
             {/*mobile drawer*/}
             {!matchUpMd && <Drawer variant="temporary"
-                     sx={{
-                         width: appSettings.drawerWidth, flexShrink: 0,
-                         [`& .MuiDrawer-paper`]: {width: appSettings.drawerWidth, boxSizing: "border-box",},
-                     }}
-                     open={appSettings.isOpen} onClose={props.drawerOnClose}
+                                   sx={{
+                                       width: appSettings.drawerWidth, flexShrink: 0,
+                                       [`& .MuiDrawer-paper`]: {
+                                           width: appSettings.drawerWidth,
+                                           boxSizing: "border-box",
+                                       },
+                                   }}
+                                   open={appSettings.isOpen} onClose={props.drawerOnClose}
             >
                 <MenuList/>
             </Drawer>}
 
             {/*browser drawer*/}
             {matchUpMd && <Drawer variant="permanent" open={appSettings.isOpen} onClose={props.drawerOnClose}
-                     sx={{
-                         display: {xs: 'none', md: 'block'},
-                         width: appSettings.drawerWidth, flexShrink: 0,
-                         [`& .MuiDrawer-paper`]: {
-                             width: appSettings.drawerWidth,
-                             boxSizing: "border-box",
-                         },
-                     }}
+                                  sx={{
+                                      display: {xs: 'none', md: 'block'},
+                                      width: appSettings.drawerWidth, flexShrink: 0,
+                                      [`& .MuiDrawer-paper`]: {
+                                          width: appSettings.drawerWidth,
+                                          boxSizing: "border-box",
+                                          borderColor: "white"
+                                      },
+                                  }}
             >
                 <MenuList/>
             </Drawer>}
