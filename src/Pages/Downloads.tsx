@@ -6,17 +6,19 @@ export default function Downloads() {
 
     const columns: GridColDef[] = [
         {field: 'id', headerName: 'ID', minWidth: 70},
-        {field: 'firstName', headerName: 'First name', minWidth: 130},
-        {field: 'lastName', headerName: 'Last name', minWidth: 130},
+        {field: 'name', headerName: '名称', minWidth: 130},
+        {field: 'progress', headerName: '下载进度', minWidth: 130},
+        {field: 'category', headerName: '分类', minWidth: 130},
+
         {
-            field: 'age',
-            headerName: 'Age',
+            field: 'download_speed',
+            headerName: '下载速度',
             type: 'number',
             width: 90,
         },
         {
-            field: 'fullName',
-            headerName: 'Full name',
+            field: 'upload_speed',
+            headerName: '上传速度',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
             width: 160,
