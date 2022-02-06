@@ -5,23 +5,22 @@ import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid';
 export default function Downloads() {
 
     const columns: GridColDef[] = [
-        {field: 'id', headerName: 'ID', minWidth: 70},
-        {field: 'name', headerName: '名称', minWidth: 130},
-        {field: 'progress', headerName: '下载进度', minWidth: 130},
-        {field: 'category', headerName: '分类', minWidth: 130},
-
+        {field: 'id', headerName: 'ID',type:'string' },
+        {field: 'name', headerName: '名称',type:'singleSelect' },
+        {field: 'filesize', headerName: '文件大小',type:'number' },
+        {field: 'progress', headerName: '下载进度', },
+        {field: 'category', headerName: '分类',},
         {
             field: 'download_speed',
             headerName: '下载速度',
             type: 'number',
-            width: 90,
         },
         {
             field: 'upload_speed',
             headerName: '上传速度',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            width: 160,
+            minWidth:110,
             valueGetter: (params: GridValueGetterParams) =>
                 `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         },

@@ -1,4 +1,4 @@
-import {AppBar, IconButton, Toolbar, Typography, useMediaQuery} from "@mui/material";
+import {AppBar, Box, IconButton, Toolbar, Typography, useMediaQuery} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import {useTheme} from "@mui/system";
 import React from "react";
@@ -17,9 +17,11 @@ export default function Header(props: IProps) {
                 <IconButton color="inherit" aria-label="open-drawer" edge="end"
                             sx={{display: {xs: 'block', md: 'none'}}}
                             onClick={props.handleLeftDrawerToggle}>
-                    <MenuIcon sx={{mt:1}}/>
+                    <MenuIcon sx={{mt: 1}}/>
                 </IconButton>
-                <Typography variant="h6" sx={{mx: matchUpMd ? 0 : 'auto',mt:'3px'}}>NasManager</Typography>
+                <Typography variant="h6"  sx={{mx: matchUpMd ? 0 : 'auto', mt: '3px',fontWeight:200}}>Nas
+                    <Box component={'span'} sx={{backgroundColor: 'rgb(227, 242, 253)', color: '#1976d2'}}>Manager</Box>
+                </Typography>
             </Toolbar>
         </AppBar>
     );
