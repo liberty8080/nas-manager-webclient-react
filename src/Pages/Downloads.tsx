@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid';
+import {AxiosIns} from "../api/api";
 
 
 export default function Downloads() {
 
+    useEffect(()=>{
+        AxiosIns.get("/downloads/torrents").then((res)=>{
+            console.log(res.data.data)
+        })
+    })
     const columns: GridColDef[] = [
-        {field: 'id', headerName: 'ID',type:'string' },
-        {field: 'name', headerName: '名称',type:'singleSelect' },
-        {field: 'filesize', headerName: '文件大小',type:'number' },
-        {field: 'progress', headerName: '下载进度', },
+        {field: 'id', headerName: 'ID', type: 'string'},
+        {field: 'name', headerName: '名称', type: 'singleSelect'},
+        {field: 'filesize', headerName: '文件大小', type: 'number'},
+        {field: 'progress', headerName: '下载进度',},
         {field: 'category', headerName: '分类',},
         {
             field: 'download_speed',
@@ -20,7 +26,7 @@ export default function Downloads() {
             headerName: '上传速度',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            minWidth:110,
+            minWidth: 110,
             valueGetter: (params: GridValueGetterParams) =>
                 `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         },
