@@ -1,52 +1,52 @@
-import React, {useEffect} from "react";
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid';
-import {AxiosIns} from "../api/api";
+import React, {useEffect, useState} from "react";
+import {DataGrid, GridColDef} from '@mui/x-data-grid';
+import {AxiosIns, IResponse} from "../api/api";
 
+interface Torrent{
+    ID:number
+    Name:string
+    TorrentSize:number
+    DownloadDir:string
+    Status:string
+    RateDownload:number
+    RateUpload:number
+
+}
 
 export default function Downloads() {
-
+    const [torrents,setTorrents] = useState<Torrent[]>([])
     useEffect(()=>{
-        AxiosIns.get("/downloads/torrents").then((res)=>{
+        AxiosIns.get<IResponse>("/downloads/torrents").then((res)=>{
             console.log(res.data.data)
+            setTorrents(res.data.data)
         })
-    })
+    },[])
     const columns: GridColDef[] = [
-        {field: 'id', headerName: 'ID', type: 'string'},
-        {field: 'name', headerName: '名称', type: 'singleSelect'},
-        {field: 'filesize', headerName: '文件大小', type: 'number'},
-        {field: 'progress', headerName: '下载进度',},
-        {field: 'category', headerName: '分类',},
+        {field: 'id', headerName: 'ID', type: 'number',},
+        {field: 'name', headerName: '名称', type: 'string',minWidth:200},
+        {field: 'torrent_size', headerName: '文件大小', type: 'string'},
+        {field: 'download_dir', headerName: '目标文件夹',type:'string'},
+        {field: 'status', headerName: '状态',},
         {
-            field: 'download_speed',
+            field: 'rate_download',
             headerName: '下载速度',
             type: 'number',
         },
         {
-            field: 'upload_speed',
+            field: 'rate_upload',
             headerName: '上传速度',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
             minWidth: 110,
-            valueGetter: (params: GridValueGetterParams) =>
-                `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+            // valueGetter: (params: GridValueGetterParams) =>
+            //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         },
+        {field:'left_time',headerName:'剩余时间'}
     ];
-
-    const rows = [
-        {id: 1, lastName: 'Snow', firstName: 'Jon', age: 35},
-        {id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42},
-        {id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45},
-        {id: 4, lastName: 'Stark', firstName: 'Arya', age: 16},
-        {id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null},
-        {id: 6, lastName: 'Melisandre', firstName: null, age: 150},
-        {id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44},
-        {id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36},
-        {id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65},
-
-    ];
+    
     return (
         <div style={{height: '100%', width: '100%', backgroundColor: "white", borderRadius: '12px'}}>
-            <DataGrid columns={columns} rows={rows} sx={{
+            <DataGrid columns={columns} rows={torrents} sx={{
                 border: 0,
                 userSelect: 'none',
                 '& .MuiDataGrid-cell:focus, .MuiDataGrid-columnHeader:focus, .MuiDataGrid-columnHeader:focus-within': {outline: 0}
