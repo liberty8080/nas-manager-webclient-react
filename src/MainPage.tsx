@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppActionTypes} from "./store/actions";
 import {rootState} from "./store/reducers";
 import SideBar from "./components/SideBar";
+import './styles/App.css'
 
 export default function MainPage() {
     const theme = useTheme();
