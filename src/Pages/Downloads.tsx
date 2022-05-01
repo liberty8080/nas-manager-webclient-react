@@ -1,27 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import {AxiosIns, IResponse} from "../api/api";
+import {AxiosIns, ApiResult} from "../api/api";
 import {Table, Tag, Space} from 'antd';
 import {TablePaginationConfig} from "antd/es/table/Table";
+import {GB, KB, MB, Torrent} from "../model/Torrents";
 
-interface Torrent {
-    ID: number
-    Name: string
-    TorrentSize: number
-    DownloadDir: string
-    Status: string
-    RateDownload: number
-    RateUpload: number
-}
 
-const GB = 8 * 1024 * 1024 * 1024
-const MB = 8 * 1024 * 1024
-const KB = 8 * 1024
+
 
 export default function Downloads() {
     const [torrents, setTorrents] = useState<Torrent[]>([])
     useEffect(() => {
-        AxiosIns.get<IResponse>("/downloads/torrents").then((res: { data: { data: React.SetStateAction<Torrent[]>; }; }) => {
+        AxiosIns.get<ApiResult<Torrent[]>>("/downloads/torrents").then(res => {
             console.log(res.data.data)
             setTorrents(res.data.data)
         })

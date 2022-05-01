@@ -1,9 +1,9 @@
 import axios, {AxiosInstance} from "axios";
 
-export interface IResponse{
+export interface ApiResult<T>{
     code:number
     msg:string
-    data:any
+    data:T
 }
 
 export const AxiosIns:AxiosInstance=axios.create({
@@ -13,3 +13,4 @@ export const AxiosIns:AxiosInstance=axios.create({
         "Content-Type": "application/json"
     },
 })
+
