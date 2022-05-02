@@ -1,12 +1,16 @@
 import {
+    Collapse,
+    Divider,
     Drawer,
-    List,
+    List, ListItem,
     ListItemButton,
     ListItemIcon,
     ListItemText,
     Toolbar,
     useMediaQuery
 } from "@mui/material";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import {Box} from "@mui/system";
 import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "../store/reducers";
@@ -14,6 +18,8 @@ import {useTheme} from "@mui/material/styles";
 import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 import {Link as RouterLink} from 'react-router-dom'
 import {AppActionTypes} from "../store/actions";
+import SettingsApplicationsRoundedIcon from '@mui/icons-material/SettingsApplicationsRounded';
+import {useState} from "react";
 
 
 interface IProps {
@@ -22,13 +28,21 @@ interface IProps {
 
 //todo: 自定义MenuItem
 function MenuList() {
+    // const [open, setOpen] = useState(true);
+
+    const menuSettingsOpen = useSelector((state: rootState) => state.app.isMenuSettingsOpen)
+
     const dispatch = useDispatch();
     const handleMenuClicked = () => {
         dispatch({
-            type: AppActionTypes.MENU_OPEN, payload: false
+            type: AppActionTypes.MENU_OPEN, isOpen: false
         })
     }
-
+    const handleSettingsClick = () => {
+        dispatch({
+            type: AppActionTypes.MENU_SETTINGS_OPEN,isMenuSettingsOpen:!menuSettingsOpen
+        })
+    };
     return (<>
         <Toolbar/>
         <Box sx={{overflow: "auto"}}>
@@ -37,26 +51,24 @@ function MenuList() {
                     <ListItemIcon> <DownloadForOfflineRoundedIcon/> </ListItemIcon>
                     <ListItemText primary={"Downloads"}/>
                 </ListItemButton>
-
-                {/* {["Downloads", "starred", "sendmail", "drafts"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                        </ListItemIcon>
-                        <ListItemText primary={text}/>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider/>
-            <List>
-                {["all mail", "trash", "spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                        </ListItemIcon>
-                        <ListItemText primary={text}/>
-                    </ListItem>
-                ))}*/}
+                <Divider/>
+                <ListItemButton onClick={handleSettingsClick}>
+                    <ListItemIcon>
+                        <SettingsApplicationsRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Settings" />
+                    {menuSettingsOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={menuSettingsOpen} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <ListItemButton sx={{ pl: 4 }}>
+                            <ListItemIcon>
+                                <DownloadForOfflineRoundedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Starred" />
+                        </ListItemButton>
+                    </List>
+                </Collapse>
             </List>
         </Box></>)
 }

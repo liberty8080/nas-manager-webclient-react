@@ -3,7 +3,8 @@ import {combineReducers} from "redux";
 
 export const initialState: IAppStates = {
     drawerWidth: 200,
-    isOpen: false
+    isOpen: false,
+    isMenuSettingsOpen:true
 }
 
 
@@ -18,6 +19,11 @@ const customReducer = (state: IAppStates = initialState, action: AppActions) => 
             return {
                 ...state,
                 drawerWidth: action.drawerWidth
+            }
+        case AppActionTypes.MENU_SETTINGS_OPEN:
+            return {
+                ...state,
+                isMenuSettingsOpen: action.isMenuSettingsOpen
             }
         default:
             return state

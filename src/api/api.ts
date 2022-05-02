@@ -7,7 +7,7 @@ export interface ApiResult<T>{
 }
 
 export const AxiosIns:AxiosInstance=axios.create({
-    baseURL:'http://127.0.0.1:9001',
+    baseURL:process.env.REACT_APP_BASE_URL,
     headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
