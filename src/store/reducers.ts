@@ -1,32 +1,18 @@
-import {AppActions, AppActionTypes, IAppStates} from "./actions";
+import {AppActions} from "./actions";
 import {combineReducers} from "redux";
-
-export const initialState: IAppStates = {
-    drawerWidth: 200,
-    isOpen: false,
-    isMenuSettingsOpen:true
-}
-
+import {AppActionTypes, IAppStates, IMenuObj, initialState} from "../model/Store";
 
 const customReducer = (state: IAppStates = initialState, action: AppActions) => {
     switch (action.type) {
-        case AppActionTypes.MENU_OPEN:
+        case AppActionTypes.SET_MENU:
             return {
                 ...state,
-                isOpen: action.isOpen
+                Menu:action.payload
             }
-        case AppActionTypes.SET_DRAWER_WIDTH:
-            return {
-                ...state,
-                drawerWidth: action.drawerWidth
-            }
-        case AppActionTypes.MENU_SETTINGS_OPEN:
-            return {
-                ...state,
-                isMenuSettingsOpen: action.isMenuSettingsOpen
-            }
-        default:
+        default:{
             return state
+
+        }
     }
 
 }
