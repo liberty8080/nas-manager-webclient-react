@@ -7,6 +7,7 @@ import {Provider} from "react-redux";
 import {store} from './store'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import Downloads from "./Pages/Downloads";
+import Magic from "./Pages/Magic";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.render(
                     <Route path="/" element={<MainPage/>}>
                         <Route path="/" element={<Downloads/>}/>
                         <Route path="/downloads" element={<Downloads/>}/>
+                        <Route path='/magic' element={<Magic/>}/>
                     </Route>
                 </Routes>
             </Provider>

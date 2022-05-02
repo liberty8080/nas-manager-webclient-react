@@ -20,7 +20,7 @@ import {Link as RouterLink} from 'react-router-dom'
 import SettingsApplicationsRoundedIcon from '@mui/icons-material/SettingsApplicationsRounded';
 import {useState} from "react";
 import {AppActionTypes} from "../model/Store";
-
+import FlightRoundedIcon from '@mui/icons-material/FlightRounded';
 
 interface IProps {
     drawerOnClose: (event: object) => void
@@ -32,12 +32,12 @@ function MenuList() {
     const dispatch = useDispatch();
     const handleMenuClicked = () => {
         dispatch({
-            type: AppActionTypes.SET_MENU, payload: {...menu,isMenuOpen:!menu.isMenuOpen}
+            type: AppActionTypes.SET_MENU, payload: {...menu, isMenuOpen: !menu.isMenuOpen}
         })
     }
     const handleSettingsClick = () => {
         dispatch({
-            type: AppActionTypes.SET_MENU,payload: {...menu,isSettingsOpen:!menu.isSettingsOpen}
+            type: AppActionTypes.SET_MENU, payload: {...menu, isSettingsOpen: !menu.isSettingsOpen}
         })
     };
     return (<>
@@ -51,18 +51,18 @@ function MenuList() {
                 <Divider/>
                 <ListItemButton onClick={handleSettingsClick}>
                     <ListItemIcon>
-                        <SettingsApplicationsRoundedIcon />
+                        <SettingsApplicationsRoundedIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Settings" />
-                    {menu.isSettingsOpen ? <ExpandLess /> : <ExpandMore />}
+                    <ListItemText primary="Settings"/>
+                    {menu.isSettingsOpen ? <ExpandLess/> : <ExpandMore/>}
                 </ListItemButton>
                 <Collapse in={menu.isSettingsOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton component={RouterLink} to={'/magic'} key={"Magic"} sx={{pl: 4}}>
                             <ListItemIcon>
-                                <DownloadForOfflineRoundedIcon />
+                                <FlightRoundedIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Starred" />
+                            <ListItemText primary="Magic"/>
                         </ListItemButton>
                     </List>
                 </Collapse>
