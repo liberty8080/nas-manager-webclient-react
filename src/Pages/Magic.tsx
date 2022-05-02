@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {AxiosIns, ApiResult} from "../api/api";
+import {ApiResult, AxiosIns} from "../api/api";
 import {Table} from "antd";
 import {MagicSub} from "../model/Magic";
 
@@ -7,10 +7,7 @@ export default function Magic(){
     const [magicSub,setMagicSub] = useState<MagicSub[]>([])
     useEffect(() => {
         AxiosIns.get<ApiResult<MagicSub[]>>("/Magic/all").then(res => {
-            console.log(res.data)
             setMagicSub(res.data.data)
-        }).catch(e=>{
-            console.log()
         })
     }, [])
     const columns = [

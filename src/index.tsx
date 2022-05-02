@@ -5,7 +5,7 @@ import './styles/index.css'
 import MainPage from './MainPage';
 import {Provider} from "react-redux";
 import {store} from './store'
-import {BrowserRouter,Routes,Route} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Downloads from "./Pages/Downloads";
 import Magic from "./Pages/Magic";
 

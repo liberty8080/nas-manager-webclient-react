@@ -1,7 +1,3 @@
-import {
-    CssBaseline,
-    Toolbar,
-} from "@mui/material";
 import {Box} from "@mui/system";
 import {useTheme} from "@mui/material/styles";
 import {Outlet} from 'react-router-dom';
@@ -12,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "./store/reducers";
 import SideBar from "./components/SideBar";
 import './styles/App.css'
-import {AppActionTypes, initialState} from "./model/Store";
+import {AppActionTypes} from "./model/Store";
 
 export default function MainPage() {
     const theme = useTheme();

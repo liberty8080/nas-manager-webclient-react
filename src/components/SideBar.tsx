@@ -2,7 +2,7 @@ import {
     Collapse,
     Divider,
     Drawer,
-    List, ListItem,
+    List,
     ListItemButton,
     ListItemIcon,
     ListItemText,
@@ -18,7 +18,6 @@ import {useTheme} from "@mui/material/styles";
 import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 import {Link as RouterLink} from 'react-router-dom'
 import SettingsApplicationsRoundedIcon from '@mui/icons-material/SettingsApplicationsRounded';
-import {useState} from "react";
 import {AppActionTypes} from "../model/Store";
 import FlightRoundedIcon from '@mui/icons-material/FlightRounded';
 
@@ -58,7 +57,7 @@ function MenuList() {
                 </ListItemButton>
                 <Collapse in={menu.isSettingsOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItemButton component={RouterLink} to={'/magic'} key={"Magic"} sx={{pl: 4}}>
+                        <ListItemButton component={RouterLink} to={'/magic'} key={"Magic"} sx={{pl: 4}} onClick={handleMenuClicked}>
                             <ListItemIcon>
                                 <FlightRoundedIcon/>
                             </ListItemIcon>

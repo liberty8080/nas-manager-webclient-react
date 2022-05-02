@@ -1,6 +1,6 @@
 import {AppActions} from "./actions";
 import {combineReducers} from "redux";
-import {AppActionTypes, IAppStates, IMenuObj, initialState} from "../model/Store";
+import {AppActionTypes, IAppStates, initialState} from "../model/Store";
 
 const customReducer = (state: IAppStates = initialState, action: AppActions) => {
     switch (action.type) {

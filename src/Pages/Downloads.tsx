@@ -1,11 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import {AxiosIns, ApiResult} from "../api/api";
-import {Table, Tag, Space} from 'antd';
-import {TablePaginationConfig} from "antd/es/table/Table";
+import {ApiResult, AxiosIns} from "../api/api";
+import {Table} from 'antd';
 import {GB, KB, MB, Torrent} from "../model/Torrents";
-
-
 
 
 export default function Downloads() {
