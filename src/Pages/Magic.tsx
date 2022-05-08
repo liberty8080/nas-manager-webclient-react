@@ -89,7 +89,6 @@ const MagicDialog = (props: IDialogProps) => {
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const onSubmit = (e: React.SyntheticEvent) => {
-        console.log(magicValue);
         e.preventDefault()
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -108,12 +107,15 @@ const MagicDialog = (props: IDialogProps) => {
             <Dialog open={props.open} onClose={onClose} fullScreen={fullScreen}>
                 <DialogTitle>Add Subscribe</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
+                    {/*<DialogContentText>
                         To subscribe to this website, please enter your email address here. We
                         will send updates occasionally.
-                    </DialogContentText>
-                    <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="false"
+                    </DialogContentText>*/}
+                    <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
                                onChange={onChange} name={'url'} value={magicValue.url} label={"Subscribe URL"}/>
+                    <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
+                               onChange={onChange} name={'comment'} value={magicValue.comment} label={"Comment"}/>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Cancel</Button>
