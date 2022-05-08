@@ -88,19 +88,24 @@ const MagicDialog = (props: IDialogProps) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = (e: React.SyntheticEvent) => {
+        console.log(magicValue);
         e.preventDefault()
-        console.log("22");
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const {name, value} = e.target
         setMagicValue({...magicValue, [name]: value})
     }
 
+    const onClose = (e: React.MouseEvent) => {
+        setMagicValue(defaultValue)
+        props.onClose(e)
+    }
+
 
     return (<>
-        <form onSubmit={onSubmit}>
-            <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
+        {/*<form onSubmit={onSubmit}>*/}
+            <Dialog open={props.open} onClose={onClose} fullScreen={fullScreen}>
                 <DialogTitle>Add Subscribe</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -111,11 +116,11 @@ const MagicDialog = (props: IDialogProps) => {
                                onChange={onChange} name={'url'} value={magicValue.url} label={"Subscribe URL"}/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.onClose}>Cancel</Button>
-                    <Button type="submit">Subscribe</Button>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button type="submit" onClick={onSubmit}>Subscribe</Button>
                 </DialogActions>
             </Dialog>
-        </form>
+        {/*</form>*/}
 
     </>)
 }
