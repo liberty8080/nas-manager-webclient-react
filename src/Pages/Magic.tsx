@@ -3,11 +3,11 @@ import {ApiResult, AxiosIns} from "../api/api";
 import {Table} from "antd";
 import {MagicSub} from "../model/Magic";
 import {
-    Button,
+    Backdrop,
+    Button, CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent,
     TextField,
     useMediaQuery
@@ -15,22 +15,33 @@ import {
 import {useTheme} from "@mui/system";
 
 export default function Magic() {
-    const [magicSub, setMagicSub] = useState<MagicSub[]>([])
+    const [subList, setSubList] = useState<MagicSub[]>([])
     const [DetailModel, setDetailModel] = useState(false);
-
+    const [loading, setLoading] = useState(false);
+    const [currentSub, setCurrentSub] = useState(defaultSub);
     useEffect(() => {
-        AxiosIns.get<ApiResult<MagicSub[]>>("/Magic/all").then(res => {
-            setMagicSub(res.data.data)
+        AxiosIns.get<ApiResult<MagicSub[]>>("/magic/all").then(res => {
+            setSubList(res.data.data)
         })
-    }, [])
+    }, [DetailModel, loading])
     const handleModalOpen = () => {
         setDetailModel(true)
     }
     const handleModalClose = () => {
         setDetailModel(false)
     }
-    const handleSubmit = (e: React.MouseEvent<Element>) => {
-        console.log(e.target)
+
+    const handleEdit = (record: MagicSub) => {
+        setDetailModel(true)
+        setCurrentSub(record)
+    }
+
+    const handleDelete = (id: number) => {
+        setLoading(true)
+        AxiosIns.delete("/magic/" + id).then(res => {
+            setLoading(false)
+            console.log(res.data)
+        })
     }
     const columns = [
         {dataIndex: 'comment', key: 'comment', title: '名称'},
@@ -43,21 +54,29 @@ export default function Magic() {
         {dataIndex: 'bandwidthLeft', key: 'bandwidthLeft', title: '剩余流量'},
         {dataIndex: 'type', key: 'type', title: '类型'},
         {dataIndex: 'cron', key: 'cron', title: 'cron'},
-        {dataIndex: 'id', key: 'id', title: 'ID'},
+        // {dataIndex: 'id', key: 'id', title: 'ID'},
         {
-            title: '操作', key: 'action', render: () => <div>
-                <Button>编辑</Button>
-                <Button>删除</Button>
+            title: '操作', key: 'action', render: (record: MagicSub) => <div>
+                <Button onClick={() => handleEdit(record)}>编辑</Button>
+                <Button onClick={() => handleDelete(record.id)}>删除</Button>
             </div>
         }
     ]
     return (<>
             <div style={{}}>
+                <Backdrop
+                    sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                    open={loading}
+                    onClick={() => setLoading(false)}
+                >
+                    <CircularProgress color="inherit"/>
+                </Backdrop>
                 <Button onClick={handleModalOpen}>添加订阅</Button>
-                <MagicDialog open={DetailModel} onClose={handleModalClose} onSubmit={handleSubmit}/>
+                <MagicDialog open={DetailModel} onClose={handleModalClose} current={currentSub}
+                             onChange={setCurrentSub}/>
             </div>
             <div style={{height: '100%', width: '100%', backgroundColor: "white", borderRadius: '12px'}}>
-                <Table columns={columns} dataSource={magicSub} rowKey={"id"}
+                <Table columns={columns} dataSource={subList} rowKey={"id"}
                        pagination={{position: []}}/>
             </div>
         </>
@@ -66,11 +85,12 @@ export default function Magic() {
 
 interface IDialogProps {
     open: boolean,
-    onClose: React.MouseEventHandler
-    onSubmit: React.MouseEventHandler
+    onClose: () => void
+    current: MagicSub
+    onChange: (sub: MagicSub) => void
 }
 
-const defaultValue: MagicSub = {
+const defaultSub: MagicSub = {
     id: 0,
     url: "",
     expirationTime: "",
@@ -81,41 +101,49 @@ const defaultValue: MagicSub = {
     comment: "",
 }
 
-const MagicDialog = (props: IDialogProps) => {
+const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
 
-    const [magicValue, setMagicValue] = useState<MagicSub>(defaultValue)
+    // const [magicValue, setMagicValue] = useState<MagicSub>(defaultSub)
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-    const onSubmit = (e: React.SyntheticEvent) => {
-        console.log(magicValue);
-        AxiosIns.post("/magic",magicValue).then(res=>{
-            console.log(res)
+    //提交事件
+    const onSubmit = () => {
+        AxiosIns.post("/magic", current).then(res => {
+            onChange(defaultSub)
+            console.log("sub")
+            if (res.data.code !== 200) {
+                console.log(res.data)
+// todo: 统一处理错误，弹框
+            } else {
+                onClose()
+            }
         })
-        e.preventDefault()
     }
-    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
+    // 输入框onChange事件
+    const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
         const {name, value} = e.target
-        setMagicValue({...magicValue, [name]: value})
+        onChange({...(current), [name]: value})
     }
 
-    const onClose = (e: React.MouseEvent) => {
-        setMagicValue(defaultValue)
-        props.onClose(e)
+    //取消按钮事件
+    const onCancel = () => {
+        onChange(defaultSub)
+        onClose()
     }
 
 
     return (<>
         {/*<form onSubmit={onSubmit}>*/}
-        <Dialog open={props.open} onClose={onClose} fullScreen={fullScreen}>
-            <DialogTitle>Add Subscribe</DialogTitle>
+        <Dialog open={open} onClose={onCancel} fullScreen={fullScreen}>
+            <DialogTitle>{current === defaultSub ? "Add Subscribe" : "Edit Subscribe"}</DialogTitle>
             <DialogContent>
                 {/*<DialogContentText>
                         Add Subscribe Url
                     </DialogContentText>*/}
                 <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
-                           onChange={onChange} name={'url'} value={magicValue.url} label={"Subscribe URL"}/>
+                           onChange={onInputChange} name={'url'} value={current.url} label={"Subscribe URL"}/>
 
                 <FormControl variant="standard" fullWidth margin="dense"
                 >
@@ -124,8 +152,8 @@ const MagicDialog = (props: IDialogProps) => {
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         name="type"
-                        value={magicValue.type.toString()}
-                        onChange={onChange}
+                        value={current.type.toString()}
+                        onChange={onInputChange}
                         label="Type"
                     >
                         <MenuItem value={0}>Songuo</MenuItem>
@@ -134,10 +162,10 @@ const MagicDialog = (props: IDialogProps) => {
                     </Select>
                 </FormControl>
                 <TextField required fullWidth margin="dense" multiline variant="standard" autoComplete="off"
-                           onChange={onChange} name={'comment'} value={magicValue.comment} label={"Comment"}/>
+                           onChange={onInputChange} name={'comment'} value={current.comment} label={"Comment"}/>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onCancel}>Cancel</Button>
                 <Button type="submit" onClick={onSubmit}>Subscribe</Button>
             </DialogActions>
         </Dialog>
