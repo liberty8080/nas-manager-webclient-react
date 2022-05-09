@@ -8,7 +8,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
+    DialogTitle, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent,
     TextField,
     useMediaQuery
 } from "@mui/material";
@@ -89,9 +89,13 @@ const MagicDialog = (props: IDialogProps) => {
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const onSubmit = (e: React.SyntheticEvent) => {
+        console.log(magicValue);
+        AxiosIns.post("/magic",magicValue).then(res=>{
+            console.log(res)
+        })
         e.preventDefault()
     }
-    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
         const {name, value} = e.target
         setMagicValue({...magicValue, [name]: value})
     }
@@ -104,24 +108,39 @@ const MagicDialog = (props: IDialogProps) => {
 
     return (<>
         {/*<form onSubmit={onSubmit}>*/}
-            <Dialog open={props.open} onClose={onClose} fullScreen={fullScreen}>
-                <DialogTitle>Add Subscribe</DialogTitle>
-                <DialogContent>
-                    {/*<DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
+        <Dialog open={props.open} onClose={onClose} fullScreen={fullScreen}>
+            <DialogTitle>Add Subscribe</DialogTitle>
+            <DialogContent>
+                {/*<DialogContentText>
+                        Add Subscribe Url
                     </DialogContentText>*/}
-                    <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
-                               onChange={onChange} name={'url'} value={magicValue.url} label={"Subscribe URL"}/>
-                    <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
-                               onChange={onChange} name={'comment'} value={magicValue.comment} label={"Comment"}/>
+                <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
+                           onChange={onChange} name={'url'} value={magicValue.url} label={"Subscribe URL"}/>
 
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>Cancel</Button>
-                    <Button type="submit" onClick={onSubmit}>Subscribe</Button>
-                </DialogActions>
-            </Dialog>
+                <FormControl variant="standard" fullWidth margin="dense"
+                >
+                    <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        name="type"
+                        value={magicValue.type.toString()}
+                        onChange={onChange}
+                        label="Type"
+                    >
+                        <MenuItem value={0}>Songuo</MenuItem>
+                        <MenuItem value={1}>StarDream</MenuItem>
+                        <MenuItem value={2}>Frog</MenuItem>
+                    </Select>
+                </FormControl>
+                <TextField required fullWidth margin="dense" multiline variant="standard" autoComplete="off"
+                           onChange={onChange} name={'comment'} value={magicValue.comment} label={"Comment"}/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button type="submit" onClick={onSubmit}>Subscribe</Button>
+            </DialogActions>
+        </Dialog>
         {/*</form>*/}
 
     </>)
