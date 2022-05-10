@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ApiResult, AxiosIns} from "../api/api";
+import {Api} from "../api/api";
 import {Table} from "antd";
 import {MagicSub} from "../model/Magic";
 import {
@@ -15,17 +15,18 @@ import {
 import {useTheme} from "@mui/system";
 
 export default function Magic() {
-    const [subList, setSubList] = useState<MagicSub[]>([])
-    const [DetailModel, setDetailModel] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [currentSub, setCurrentSub] = useState(defaultSub);
+    const [subList, setSubList] = useState<MagicSub[]>([]) // table list
+    const [DetailModel, setDetailModel] = useState(false); // detail page if open
+    const [loading, setLoading] = useState(false); // if loading
+    const [currentSub, setCurrentSub] = useState<MagicSub>(defaultSub);
+
     useEffect(() => {
-        AxiosIns.get<ApiResult<MagicSub[]>>("/magic/all").then(res => {
-            setSubList(res.data.data)
-        })
+        Api.get<MagicSub[]>("/magic/all").then(res => setSubList(res.data))
     }, [DetailModel, loading])
-    const handleModalOpen = () => {
+
+    const handleAdd = () => {
         setDetailModel(true)
+        setCurrentSub(defaultSub) // when add new an empty sub
     }
     const handleModalClose = () => {
         setDetailModel(false)
@@ -38,9 +39,8 @@ export default function Magic() {
 
     const handleDelete = (id: number) => {
         setLoading(true)
-        AxiosIns.delete("/magic/" + id).then(res => {
+        Api.delete(`/magic/${id}`).then(() => {
             setLoading(false)
-            console.log(res.data)
         })
     }
     const columns = [
@@ -71,7 +71,7 @@ export default function Magic() {
                 >
                     <CircularProgress color="inherit"/>
                 </Backdrop>
-                <Button onClick={handleModalOpen}>添加订阅</Button>
+                <Button onClick={handleAdd}>添加订阅</Button>
                 <MagicDialog open={DetailModel} onClose={handleModalClose} current={currentSub}
                              onChange={setCurrentSub}/>
             </div>
@@ -103,23 +103,18 @@ const defaultSub: MagicSub = {
 
 const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
 
-    // const [magicValue, setMagicValue] = useState<MagicSub>(defaultSub)
-
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+    const reset = () => onChange(defaultSub)
     //提交事件
     const onSubmit = () => {
-        AxiosIns.post("/magic", current).then(res => {
-            onChange(defaultSub)
-            console.log("sub")
-            if (res.data.code !== 200) {
-                console.log(res.data)
-// todo: 统一处理错误，弹框
-            } else {
-                onClose()
-            }
-        })
+        if (current === defaultSub) {
+            Api.post("/magic", current).then()
+        } else {
+            Api.put("/magic", current).then()
+        }
+        reset()
+        onClose()
     }
     // 输入框onChange事件
     const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
@@ -129,19 +124,15 @@ const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
 
     //取消按钮事件
     const onCancel = () => {
-        onChange(defaultSub)
+        reset()
         onClose()
     }
 
 
     return (<>
-        {/*<form onSubmit={onSubmit}>*/}
         <Dialog open={open} onClose={onCancel} fullScreen={fullScreen}>
             <DialogTitle>{current === defaultSub ? "Add Subscribe" : "Edit Subscribe"}</DialogTitle>
             <DialogContent>
-                {/*<DialogContentText>
-                        Add Subscribe Url
-                    </DialogContentText>*/}
                 <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
                            onChange={onInputChange} name={'url'} value={current.url} label={"Subscribe URL"}/>
 
@@ -169,7 +160,5 @@ const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
                 <Button type="submit" onClick={onSubmit}>Subscribe</Button>
             </DialogActions>
         </Dialog>
-        {/*</form>*/}
-
     </>)
 }

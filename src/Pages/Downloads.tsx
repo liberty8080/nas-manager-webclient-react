@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ApiResult, AxiosIns} from "../api/api";
+import {Api} from "../api/api";
 import {Table} from 'antd';
 import {GB, KB, MB, Torrent} from "../model/Torrents";
 
@@ -7,9 +7,7 @@ import {GB, KB, MB, Torrent} from "../model/Torrents";
 export default function Downloads() {
     const [torrents, setTorrents] = useState<Torrent[]>([])
     useEffect(() => {
-        AxiosIns.get<ApiResult<Torrent[]>>("/downloads/torrents").then(res => {
-            setTorrents(res.data.data)
-        })
+        Api.get<Torrent[]>('/downloads/torrents').then(res=>setTorrents(res.data))
     }, [])
 
     const columns = [
