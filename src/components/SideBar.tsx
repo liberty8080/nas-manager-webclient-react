@@ -57,7 +57,8 @@ function MenuList() {
                 </ListItemButton>
                 <Collapse in={menu.isSettingsOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItemButton component={RouterLink} to={'/magic'} key={"Magic"} sx={{pl: 4}} onClick={handleMenuClicked}>
+                        <ListItemButton component={RouterLink} to={'/magic'} key={"Magic"} sx={{pl: 4}}
+                                        onClick={handleMenuClicked}>
                             <ListItemIcon>
                                 <FlightRoundedIcon/>
                             </ListItemIcon>

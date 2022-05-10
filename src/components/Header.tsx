@@ -18,10 +18,11 @@ export default function Header(props: IProps) {
                             onClick={props.handleLeftDrawerToggle}>
                     <MenuIcon sx={{mt: 1}}/>
                 </IconButton>
-                <Typography variant="h6" sx={{mx: matchUpMd ? 0 : 'auto', mt: '3px',fontWeight:200}}>
+                <Typography variant="h6" sx={{mx: matchUpMd ? 0 : 'auto', mt: '3px', fontWeight: 200}}>
                     <Box>
-                        <Box component={'span'} >Nas</Box>
-                        <Box component={'span'} sx={{backgroundColor: 'rgb(227, 242, 253)', color: '#1976d2'}}>Manager</Box>
+                        <Box component={'span'}>Nas</Box>
+                        <Box component={'span'}
+                             sx={{backgroundColor: 'rgb(227, 242, 253)', color: '#1976d2'}}>Manager</Box>
                     </Box>
                 </Typography>
             </Toolbar>

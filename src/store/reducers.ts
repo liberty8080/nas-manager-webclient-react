@@ -7,9 +7,9 @@ const customReducer = (state: IAppStates = initialState, action: AppActions) => 
         case AppActionTypes.SET_MENU:
             return {
                 ...state,
-                Menu:action.payload
+                Menu: action.payload
             }
-        default:{
+        default: {
             return state
 
         }

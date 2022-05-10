@@ -20,7 +20,7 @@ export default function MainPage() {
     const toggleMenuOpen = () => {
         let menu = app.Menu
         dispatch({
-            type: AppActionTypes.SET_MENU, payload: {...menu,isMenuOpen:!menu.isMenuOpen}
+            type: AppActionTypes.SET_MENU, payload: {...menu, isMenuOpen: !menu.isMenuOpen}
         })
     }
 
@@ -30,7 +30,14 @@ export default function MainPage() {
             <Header handleLeftDrawerToggle={toggleMenuOpen}/>
             <SideBar drawerOnClose={toggleMenuOpen}/>
             <Box component="main"
-                 sx={{flexGrow: 1, p: 3, mt:'64px', minHeight: 'calc(100vh - 64px)', backgroundColor: 'rgb(227, 242, 253)',borderRadius:"14px 14px 0 0"}}>
+                 sx={{
+                     flexGrow: 1,
+                     p: 3,
+                     mt: '64px',
+                     minHeight: 'calc(100vh - 64px)',
+                     backgroundColor: 'rgb(227, 242, 253)',
+                     borderRadius: "14px 14px 0 0"
+                 }}>
                 {/*路由替换区域*/}
                 <Outlet/>
             </Box>

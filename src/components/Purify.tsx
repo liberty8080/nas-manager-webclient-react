@@ -1,8 +1,6 @@
-
-
 export default function Purify() {
 
-  return (
-   <div></div>
-  );
+    return (
+        <div></div>
+    );
 }
