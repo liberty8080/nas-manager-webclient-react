@@ -100,7 +100,7 @@ const defaultSub: MagicSub = {
     cron: "",
     comment: "",
 }
-
+// todo: 不需要提出来，嵌套就行
 const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
 
     const theme = useTheme();
@@ -108,9 +108,11 @@ const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
     const reset = () => onChange(defaultSub)
     //提交事件
     const onSubmit = () => {
+        // todo:回显BUG
         if (current === defaultSub) {
             Api.post("/magic", current).then()
         } else {
+
             Api.put("/magic", current).then()
         }
         reset()
