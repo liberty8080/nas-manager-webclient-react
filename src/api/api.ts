@@ -18,11 +18,11 @@ const AxiosIns: AxiosInstance = axios.create({
 AxiosIns.interceptors.response.use(res => {
     let s = res.data as ApiResult
     if (s.code !== 200) {
-        //todo:handle all error msg
+        return Promise.reject(res)
     }
     return res
 }, error => {
-    return error
+    return Promise.reject(error)
 })
 
 // wrapped Axios with simple usage

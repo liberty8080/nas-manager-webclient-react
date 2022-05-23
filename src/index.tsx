@@ -8,18 +8,21 @@ import {store} from './store'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Downloads from "./Pages/Downloads";
 import Magic from "./Pages/Magic";
+import {SnackbarProvider} from "notistack";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Provider store={store}>
-                <Routes>
-                    <Route path="/" element={<MainPage/>}>
-                        <Route path="/" element={<Downloads/>}/>
-                        <Route path="/downloads" element={<Downloads/>}/>
-                        <Route path='/magic' element={<Magic/>}/>
-                    </Route>
-                </Routes>
+                <SnackbarProvider maxSnack={3}>
+                    <Routes>
+                        <Route path="/" element={<MainPage/>}>
+                            <Route path="/" element={<Downloads/>}/>
+                            <Route path="/downloads" element={<Downloads/>}/>
+                            <Route path='/magic' element={<Magic/>}/>
+                        </Route>
+                    </Routes>
+                </SnackbarProvider>
             </Provider>
         </BrowserRouter>
     </React.StrictMode>,

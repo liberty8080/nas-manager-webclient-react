@@ -13,27 +13,46 @@ import {
     useMediaQuery
 } from "@mui/material";
 import {useTheme} from "@mui/system";
+import {useSnackbar} from "notistack";
+
+// 模态框状态
+enum MagicModalStatus {Close, Edit, Add}
+
+const defaultSub: MagicSub = {
+    id: 0,
+    url: "",
+    expirationTime: "",
+    bandwidthLeft: "",
+    type: 0,
+    data: "",
+    cron: "",
+    comment: "",
+}
 
 export default function Magic() {
     const [subList, setSubList] = useState<MagicSub[]>([]) // table list
-    const [DetailModel, setDetailModel] = useState(false); // detail page if open
+    const [DetailModel, setDetailModel] = useState(MagicModalStatus.Close); // detail page if open
     const [loading, setLoading] = useState(false); // if loading
     const [currentSub, setCurrentSub] = useState<MagicSub>(defaultSub);
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         Api.get<MagicSub[]>("/magic/all").then(res => setSubList(res.data))
     }, [DetailModel, loading])
 
     const handleAdd = () => {
-        setDetailModel(true)
+        setDetailModel(MagicModalStatus.Add)
         setCurrentSub(defaultSub) // when add new an empty sub
     }
     const handleModalClose = () => {
-        setDetailModel(false)
+        setDetailModel(MagicModalStatus.Close)
     }
 
     const handleEdit = (record: MagicSub) => {
-        setDetailModel(true)
+        setDetailModel(MagicModalStatus.Edit)
         setCurrentSub(record)
     }
 
@@ -43,6 +62,38 @@ export default function Magic() {
             setLoading(false)
         })
     }
+
+    const onSubmit = () => {
+        switch (DetailModel) {
+            case MagicModalStatus.Add:
+                Api.post("/magic", currentSub)
+                    .then(
+                        () => enqueueSnackbar("添加成功"))
+                    .catch(error => {
+                        enqueueSnackbar(error)
+                    })
+                break;
+            case MagicModalStatus.Edit:
+                Api.put("/magic", currentSub)
+                    .then(
+                        () => enqueueSnackbar("修改成功"))
+                    .catch(error => {
+                        enqueueSnackbar(error)
+                    })
+                break;
+            default:
+                break;
+        }
+
+        setCurrentSub(defaultSub)
+        handleModalClose()
+    }
+
+    const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
+        const {name, value} = e.target
+        setCurrentSub({...(currentSub), [name]: value})
+    }
+
     const columns = [
         {dataIndex: 'comment', key: 'comment', title: '名称'},
         {
@@ -72,8 +123,41 @@ export default function Magic() {
                     <CircularProgress color="inherit"/>
                 </Backdrop>
                 <Button onClick={handleAdd}>添加订阅</Button>
-                <MagicDialog open={DetailModel} onClose={handleModalClose} current={currentSub}
-                             onChange={setCurrentSub}/>
+                {/*                <MagicDialog open={DetailModel} onClose={handleModalClose} current={currentSub}
+                             onChange={setCurrentSub} />*/}
+                <Dialog open={DetailModel !== MagicModalStatus.Close} onClose={handleModalClose}
+                        fullScreen={fullScreen}>
+                    <DialogTitle>{DetailModel === MagicModalStatus.Add ? "Add Subscribe" : "Edit Subscribe"}</DialogTitle>
+                    <DialogContent>
+                        <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
+                                   onChange={onInputChange} name={'url'} value={currentSub.url}
+                                   label={"Subscribe URL"}/>
+
+                        <FormControl variant="standard" fullWidth margin="dense"
+                        >
+                            <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-simple-select-standard"
+                                name="type"
+                                value={currentSub.type.toString()}
+                                onChange={onInputChange}
+                                label="Type"
+                            >
+                                <MenuItem value={0}>Songuo</MenuItem>
+                                <MenuItem value={1}>StarDream</MenuItem>
+                                <MenuItem value={2}>Frog</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField required fullWidth margin="dense" multiline variant="standard" autoComplete="off"
+                                   onChange={onInputChange} name={'comment'} value={currentSub.comment}
+                                   label={"Comment"}/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleModalClose}>Cancel</Button>
+                        <Button type="submit" onClick={onSubmit}>Submit</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
             <div style={{height: '100%', width: '100%', backgroundColor: "white", borderRadius: '12px'}}>
                 <Table columns={columns} dataSource={subList} rowKey={"id"}
@@ -83,84 +167,4 @@ export default function Magic() {
     )
 }
 
-interface IDialogProps {
-    open: boolean,
-    onClose: () => void
-    current: MagicSub
-    onChange: (sub: MagicSub) => void
-}
 
-const defaultSub: MagicSub = {
-    id: 0,
-    url: "",
-    expirationTime: "",
-    bandwidthLeft: "",
-    type: 0,
-    data: "",
-    cron: "",
-    comment: "",
-}
-// todo: 不需要提出来，嵌套就行
-const MagicDialog = ({current, onChange, onClose, open}: IDialogProps) => {
-
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const reset = () => onChange(defaultSub)
-    //提交事件
-    const onSubmit = () => {
-        // todo:回显BUG
-        if (current === defaultSub) {
-            Api.post("/magic", current).then()
-        } else {
-
-            Api.put("/magic", current).then()
-        }
-        reset()
-        onClose()
-    }
-    // 输入框onChange事件
-    const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
-        const {name, value} = e.target
-        onChange({...(current), [name]: value})
-    }
-
-    //取消按钮事件
-    const onCancel = () => {
-        reset()
-        onClose()
-    }
-
-
-    return (<>
-        <Dialog open={open} onClose={onCancel} fullScreen={fullScreen}>
-            <DialogTitle>{current === defaultSub ? "Add Subscribe" : "Edit Subscribe"}</DialogTitle>
-            <DialogContent>
-                <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
-                           onChange={onInputChange} name={'url'} value={current.url} label={"Subscribe URL"}/>
-
-                <FormControl variant="standard" fullWidth margin="dense"
-                >
-                    <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-standard-label"
-                        id="demo-simple-select-standard"
-                        name="type"
-                        value={current.type.toString()}
-                        onChange={onInputChange}
-                        label="Type"
-                    >
-                        <MenuItem value={0}>Songuo</MenuItem>
-                        <MenuItem value={1}>StarDream</MenuItem>
-                        <MenuItem value={2}>Frog</MenuItem>
-                    </Select>
-                </FormControl>
-                <TextField required fullWidth margin="dense" multiline variant="standard" autoComplete="off"
-                           onChange={onInputChange} name={'comment'} value={current.comment} label={"Comment"}/>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button type="submit" onClick={onSubmit}>Subscribe</Button>
-            </DialogActions>
-        </Dialog>
-    </>)
-}
