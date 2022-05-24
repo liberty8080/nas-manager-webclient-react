@@ -64,6 +64,13 @@ function MenuList() {
                             </ListItemIcon>
                             <ListItemText primary="Magic"/>
                         </ListItemButton>
+                        <ListItemButton component={RouterLink} to={'/chanify'} key={"Chanify"} sx={{pl: 4}}
+                                        onClick={handleMenuClicked}>
+                            <ListItemIcon>
+                                <FlightRoundedIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Chanify"/>
+                        </ListItemButton>
                     </List>
                 </Collapse>
             </List>

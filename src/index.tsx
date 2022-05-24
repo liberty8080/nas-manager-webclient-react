@@ -9,6 +9,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Downloads from "./Pages/Downloads";
 import Magic from "./Pages/Magic";
 import {SnackbarProvider} from "notistack";
+import ChanifyPage from "./Pages/ChanifyPage";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -20,6 +21,7 @@ ReactDOM.render(
                             <Route path="/" element={<Downloads/>}/>
                             <Route path="/downloads" element={<Downloads/>}/>
                             <Route path='/magic' element={<Magic/>}/>
+                            <Route path='/chanify' element={<ChanifyPage/>}/>
                         </Route>
                     </Routes>
                 </SnackbarProvider>

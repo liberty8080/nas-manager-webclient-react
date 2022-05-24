@@ -22,6 +22,7 @@ AxiosIns.interceptors.response.use(res => {
     }
     return res
 }, error => {
+    console.log("error",error)
     return Promise.reject(error)
 })
 
