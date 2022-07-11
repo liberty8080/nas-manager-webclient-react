@@ -18,6 +18,10 @@ import {useSnackbar} from "notistack";
 // 模态框状态
 enum MagicModalStatus {Close, Edit, Add}
 
+/*enum MagicSubType {
+    V2 = "V2",
+    Rocket = "小火箭"
+}*/
 const defaultSub: MagicSub = {
     rocketRegex: "",
     id: 0,
@@ -41,7 +45,7 @@ export default function Magic() {
 
     useEffect(() => {
         Api.get<MagicSub[]>("/magic/all").then(res => setSubList(res.data))
-    }, [magicModalStatus, loading])
+    }, [loading])
 
     // 添加事件
     const handleAdd = () => {
@@ -66,14 +70,29 @@ export default function Magic() {
             setLoading(false)
             enqueueSnackbar("删除成功")
         })
+            .catch(()=> enqueueSnackbar("删除失败！"))
+    }
+
+    // 更新订阅数据
+    const handleUpdate = (id: number) => {
+        Api.get(`/magic/update?id=${id}`).then(()=>{
+            enqueueSnackbar("订阅数据已更新")
+        })
+            .catch(()=>{
+                enqueueSnackbar("订阅更新失败！")
+            })
     }
     // 提交事件
     const onSubmit = () => {
+        setLoading(true)
         switch (magicModalStatus) {
             case MagicModalStatus.Add:
                 Api.post("/magic", currentSub)
                     .then(
-                        () => enqueueSnackbar("添加成功"))
+                        () => {
+                            setLoading(false)
+                            enqueueSnackbar("添加成功")
+                        })
                     .catch(error => {
                         enqueueSnackbar(error)
                     })
@@ -81,7 +100,10 @@ export default function Magic() {
             case MagicModalStatus.Edit:
                 Api.put("/magic", currentSub)
                     .then(
-                        () => enqueueSnackbar("修改成功"))
+                        () => {
+                            enqueueSnackbar("修改成功")
+                            setLoading(false)
+                        })
                     .catch(error => {
                         enqueueSnackbar(error)
                     })
@@ -89,7 +111,6 @@ export default function Magic() {
             default:
                 break;
         }
-
         setCurrentSub(defaultSub)
         handleModalClose()
     }
@@ -98,17 +119,6 @@ export default function Magic() {
         const {name, value} = e.target
         setCurrentSub({...(currentSub), [name]: value})
     }
-
-    /*    const setModalTitle = () => {
-            switch (magicModalStatus){
-                case MagicModalStatus.Add:
-                    setTitle("Add Subscribes")
-                    break
-                case MagicModalStatus.Edit:
-                    setTitle("Edit Subscribes")
-                    break
-            }
-        }*/
 
     const columns = [
         {dataIndex: 'id', key: 'id', title: 'ID'},
@@ -119,12 +129,27 @@ export default function Magic() {
             title: 'URL',
         },
         {dataIndex: 'expirationTime', key: 'expirationTime', title: '过期时间'},
-        {dataIndex: 'bandwidthLeft', key: 'bandwidthLeft', title: '剩余流量'},
-        {dataIndex: 'type', key: 'type', title: '类型'},
+        {
+            dataIndex: 'bandwidthLeft', key: 'bandwidthLeft', title: '剩余流量', render: (record: number) =>
+                <div>{record}GB</div>
+        },
+        {
+            dataIndex: 'type', key: 'type', title: '类型', render: (type: number) => {
+                switch (type) {
+                    case 0:
+                        console.log("111")
+                        return <div>V2</div>
+                    case 1:
+                        console.log("222")
+                        return <div>小火箭</div>
+                }
+            }
+        },
         // {dataIndex: 'cron', key: 'cron', title: 'cron'},
         {dataIndex: 'comment', key: 'comment', title: '备注'},
         {
             title: '操作', key: 'action', render: (record: MagicSub) => <div>
+                <Button onClick={() => handleUpdate(record.id)}>更新</Button>
                 <Button onClick={() => handleEdit(record)}>编辑</Button>
                 <Button onClick={() => handleDelete(record.id)}>删除</Button>
             </div>
