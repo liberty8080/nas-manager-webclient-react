@@ -1,10 +1,9 @@
 export interface MagicSub {
     id: number,
+    name: string,
     url: string
-    expirationTime: string
-    bandwidthLeft: string
     type: number
-    data: string
+    rocketRegex: string
     cron: string
     comment: string
 }

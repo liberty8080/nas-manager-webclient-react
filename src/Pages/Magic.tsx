@@ -19,19 +19,19 @@ import {useSnackbar} from "notistack";
 enum MagicModalStatus {Close, Edit, Add}
 
 const defaultSub: MagicSub = {
+    rocketRegex: "",
     id: 0,
+    name: "",
     url: "",
-    expirationTime: "",
-    bandwidthLeft: "",
     type: 0,
-    data: "",
     cron: "",
-    comment: "",
+    comment: ""
 }
 
 export default function Magic() {
     const [subList, setSubList] = useState<MagicSub[]>([]) // table list
-    const [DetailModel, setDetailModel] = useState(MagicModalStatus.Close); // detail page if open
+    const [magicModalStatus, setMagicModalStatus] = useState(MagicModalStatus.Close); // detail page if open
+    const [title, setTitle] = useState<string>("");
     const [loading, setLoading] = useState(false); // if loading
     const [currentSub, setCurrentSub] = useState<MagicSub>(defaultSub);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
@@ -41,30 +41,35 @@ export default function Magic() {
 
     useEffect(() => {
         Api.get<MagicSub[]>("/magic/all").then(res => setSubList(res.data))
-    }, [DetailModel, loading])
+    }, [magicModalStatus, loading])
 
+    // 添加事件
     const handleAdd = () => {
-        setDetailModel(MagicModalStatus.Add)
+        setMagicModalStatus(MagicModalStatus.Add)
         setCurrentSub(defaultSub) // when add new an empty sub
+        setTitle("Add Subscribe")
     }
+    // 关闭事件
     const handleModalClose = () => {
-        setDetailModel(MagicModalStatus.Close)
+        setMagicModalStatus(MagicModalStatus.Close)
     }
-
+    // 编辑事件
     const handleEdit = (record: MagicSub) => {
-        setDetailModel(MagicModalStatus.Edit)
+        setMagicModalStatus(MagicModalStatus.Edit)
         setCurrentSub(record)
+        setTitle("Edit Subscribe")
     }
-
+    // 删除事件
     const handleDelete = (id: number) => {
         setLoading(true)
         Api.delete(`/magic/${id}`).then(() => {
             setLoading(false)
+            enqueueSnackbar("删除成功")
         })
     }
-
+    // 提交事件
     const onSubmit = () => {
-        switch (DetailModel) {
+        switch (magicModalStatus) {
             case MagicModalStatus.Add:
                 Api.post("/magic", currentSub)
                     .then(
@@ -94,8 +99,20 @@ export default function Magic() {
         setCurrentSub({...(currentSub), [name]: value})
     }
 
+    /*    const setModalTitle = () => {
+            switch (magicModalStatus){
+                case MagicModalStatus.Add:
+                    setTitle("Add Subscribes")
+                    break
+                case MagicModalStatus.Edit:
+                    setTitle("Edit Subscribes")
+                    break
+            }
+        }*/
+
     const columns = [
-        {dataIndex: 'comment', key: 'comment', title: '名称'},
+        {dataIndex: 'id', key: 'id', title: 'ID'},
+        {dataIndex: 'name', key: 'name', title: '名称'},
         {
             dataIndex: 'url',
             key: 'url',
@@ -104,8 +121,8 @@ export default function Magic() {
         {dataIndex: 'expirationTime', key: 'expirationTime', title: '过期时间'},
         {dataIndex: 'bandwidthLeft', key: 'bandwidthLeft', title: '剩余流量'},
         {dataIndex: 'type', key: 'type', title: '类型'},
-        {dataIndex: 'cron', key: 'cron', title: 'cron'},
-        // {dataIndex: 'id', key: 'id', title: 'ID'},
+        // {dataIndex: 'cron', key: 'cron', title: 'cron'},
+        {dataIndex: 'comment', key: 'comment', title: '备注'},
         {
             title: '操作', key: 'action', render: (record: MagicSub) => <div>
                 <Button onClick={() => handleEdit(record)}>编辑</Button>
@@ -125,33 +142,41 @@ export default function Magic() {
                 <Button onClick={handleAdd}>添加订阅</Button>
                 {/*                <MagicDialog open={DetailModel} onClose={handleModalClose} current={currentSub}
                              onChange={setCurrentSub} />*/}
-                <Dialog open={DetailModel !== MagicModalStatus.Close} onClose={handleModalClose}
+                <Dialog open={magicModalStatus !== MagicModalStatus.Close} onClose={handleModalClose}
                         fullScreen={fullScreen}>
-                    <DialogTitle>{DetailModel === MagicModalStatus.Add ? "Add Subscribe" : "Edit Subscribe"}</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                     <DialogContent>
                         <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
                                    onChange={onInputChange} name={'url'} value={currentSub.url}
                                    label={"Subscribe URL"}/>
+                        <TextField required fullWidth margin="dense" variant="standard" autoComplete="off"
+                                   onChange={onInputChange} name={'name'} value={currentSub.name}
+                                   label={"Name"}/>
 
                         <FormControl variant="standard" fullWidth margin="dense"
                         >
                             <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                name="type"
-                                value={currentSub.type.toString()}
-                                onChange={onInputChange}
-                                label="Type"
+                            <Select required
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    name="type"
+                                    value={currentSub.type.toString()}
+                                    onChange={onInputChange}
+                                    label="Type"
                             >
-                                <MenuItem value={0}>Songuo</MenuItem>
-                                <MenuItem value={1}>StarDream</MenuItem>
-                                <MenuItem value={2}>Frog</MenuItem>
+                                <MenuItem value={0}>V2</MenuItem>
+                                <MenuItem value={1}>小火箭</MenuItem>
                             </Select>
                         </FormControl>
-                        <TextField required fullWidth margin="dense" multiline variant="standard" autoComplete="off"
+                        <TextField fullWidth margin="dense" multiline variant="standard" autoComplete="off"
+                                   onChange={onInputChange} name={'rocketRegex'} value={currentSub.rocketRegex}
+                                   label={"正则（Rocket）"}/>
+                        <TextField fullWidth margin="dense" variant="standard" autoComplete="off"
+                                   onChange={onInputChange} name={'cron'} value={currentSub.cron}
+                                   label={"cron表达式"}/>
+                        <TextField fullWidth margin="dense" multiline variant="standard" autoComplete="off"
                                    onChange={onInputChange} name={'comment'} value={currentSub.comment}
-                                   label={"Comment"}/>
+                                   label={"备注"}/>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleModalClose}>Cancel</Button>
