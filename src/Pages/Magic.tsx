@@ -171,7 +171,7 @@ export default function Magic() {
                         fullScreen={fullScreen}>
                     <DialogTitle>{title}</DialogTitle>
                     <DialogContent>
-                        <TextField autoFocus required fullWidth margin="dense" variant="standard" autoComplete="off"
+                        <TextField autoFocus required multiline fullWidth margin="dense" variant="standard" autoComplete="off"
                                    onChange={onInputChange} name={'url'} value={currentSub.url}
                                    label={"Subscribe URL"}/>
                         <TextField required fullWidth margin="dense" variant="standard" autoComplete="off"
