@@ -75,10 +75,13 @@ export default function Magic() {
 
     // 更新订阅数据
     const handleUpdate = (id: number) => {
+        setLoading(true)
         Api.get(`/magic/update?id=${id}`).then(()=>{
             enqueueSnackbar("订阅数据已更新")
+            setLoading(false)
         })
             .catch(()=>{
+                setLoading(false)
                 enqueueSnackbar("订阅更新失败！")
             })
     }
