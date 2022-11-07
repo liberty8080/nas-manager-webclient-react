@@ -6,6 +6,8 @@ export interface ApiResult<T = any> {
     data: T
 }
 
+//todo: remove later
+console.log(process.env.REACT_APP_BASE_URL)
 const AxiosIns: AxiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: {
