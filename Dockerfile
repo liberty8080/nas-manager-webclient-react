@@ -5,7 +5,6 @@ EXPOSE 80
 FROM node:lts AS build
 WORKDIR /src
 COPY . .
-RUN npm install --global yarn
 RUN yarn
 RUN yarn build
 
